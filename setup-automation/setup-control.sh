@@ -7,142 +7,6 @@ nmcli connection add type ethernet con-name enp2s0 ifname enp2s0 ipv4.addresses 
 nmcli connection up enp2s0
 echo "192.168.1.10 control.lab control" >> /etc/hosts
 
-# # Setup rhel user
-# cp -a /root/.ssh/* /home/rhel/.ssh/.
-# chown -R rhel:rhel /home/rhel/.ssh
-# mkdir -p /home/rhel/lab_exercises/1.Terraform_Basics
-# mkdir -p /home/rhel/lab_exercises/2.Terraform_Ansible
-# mkdir -p /home/rhel/lab_exercises/3.Terraform_Provider
-# mkdir -p /home/rhel/lab_exercises/4.Terraform_AAP_Provider
-# mkdir -p /home/rhel/terraform-ee
-# mkdir /tmp/terraform_lab/
-# mkdir /tmp/terraform-ansible
-# mkdir /tmp/terraform-aap-provider
-# mkdir -p /home/rhel/.terraform.d/plugin-cache
-# #
-# #
-# #chown rhel:rhel /home/rhel/.terraformrc
-# chown -R rhel:rhel /home/rhel/lab_exercises/
-# chown rhel:rhel /home/rhel/.terraform.d/plugin-cache
-# chmod -R 777 /home/rhel/lab_exercises/
-# #
-# firewall-cmd --permanent --add-port=8043/tcp
-# firewall-cmd --reload
-# #
-# yum install -y unzip
-# curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-# unzip -qq awscliv2.zip
-# sudo ./aws/install
-# chown -R rhel:rhel /home/rhel/lab_exercises
-# chmod -R 777 /home/rhel/lab_exercises
-# #
-# yum install -y dnf
-# dnf config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-# yum install terraform -y
-# #
-# #
-# tee /home/rhel/lab_exercises/4.Terraform_AAP_Provider/main.tf << EOF
-# terraform {
-#   required_providers {
-#     aws = {
-#       source  = "hashicorp/aws"
-#       version = "6.2.0"
-#     }
-# ####### UNCOMMENT the lines BELOW #######
-# #    aap = {
-# #      source = "ansible/aap"
-# #    }
-#   }
-# }
-# #
-# provider "aws" {
-#   region = "us-east-1"
-# }
-# #
-# resource "aws_instance" "tf-instance-aap-provider" {
-#   ami           = "ami-0005e0cfe09cc9050"
-#   instance_type = "t2.micro"
-#   tags = {
-#     Name = "tf-instance-aap-provider"
-#   }
-# }
-# ####### UNCOMMENT the lines BELOW #######
-# #provider "aap" {
-# #  host     = "https://controller"
-# #  username = "admin"
-# #  password = "ansible123!"
-# #  insecure_skip_verify = true
-# #}
-# ####### UNCOMMENT the lines BELOW #######
-# #resource "aap_host" "tf-instance-aap-provider" {
-# #  inventory_id = 2
-# #  name = "aws_instance_tf"
-# #  description = "An EC2 instance created by Terraform"
-# #  variables = jsonencode(aws_instance.tf-instance-aap-provider)
-# #}
-# #
-# EOF
-# #
-# chown rhel:rhel /home/rhel/lab_exercises/4.Terraform_AAP_Provider/main.tf
-# #
-# #
-
-
-# # Create directory if it doesn't exist
-# mkdir -p /home/rhel/.aws
-
-# # Create the credentials file
-# cat > /home/rhel/.aws/credentials << EOF
-# [default]
-# aws_access_key_id = $AWS_ACCESS_KEY_ID
-# aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
-# EOF
-
-# # Set proper ownership and permissions
-# chown rhel:rhel /home/rhel/.aws/credentials
-# chmod 600 /home/rhel/aws/credentials
-
-# cat > /home/rhel/aws/config << EOF
-# [default]
-# region = $AWS_DEFAULT_REGION
-# EOF
-
-# # Set proper ownership and permissions
-# chown rhel:rhel /home/rhel/aws/config
-# chmod 600 /home/rhel/aws/config
-
-# #
-# #Create the DEFAULT AWS VPC
-# su - rhel -c "aws ec2 create-default-vpc --region $AWS_DEFAULT_REGION"
-# #
-# #
-# #Create the S3 bucket for the users of this AAP / Terraform lab
-# # Variables
-# BUCKET_PREFIX="aap-tf-bucket"  # Change this to your desired bucket prefix
-# RANDOM_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')  # Generate a random UUID and convert to lowercase
-# BUCKET_NAME="${BUCKET_PREFIX}-${RANDOM_ID}"
-# AWS_REGION="$AWS_DEFAULT_REGION"  # Change this to your desired AWS region
-# #
-# #
-# # Create the S3 STORAGE BUCKET NEEDED BY THE AAP 2.X CHALLENGE
-# echo "Creating S3 bucket: $BUCKET_NAME in region $AWS_DEFAULT_REGION"
-# su - rhel -c "aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_DEFAULT_REGION --create-bucket-configuration LocationConstraint=$AWS_DEFAULT_REGION"
-# #
-# # ## ansible home
-# # mkdir /home/$USER/ansible
-# # ## ansible-files dir
-# # mkdir /home/$USER/ansible-files
-
-# # ## ansible.cfg
-# # echo "[defaults]" > /home/$USER/.ansible.cfg
-# # echo "inventory = /home/$USER/ansible-files/hosts" >> /home/$USER/.ansible.cfg
-# # echo "host_key_checking = False" >> /home/$USER/.ansible.cfg
-
-# # ## chown and chmod all files in rhel user home
-# # chown -R rhel:rhel /home/$USER/ansible
-# # chmod 777 /home/$USER/ansible
-# # chown -R rhel:rhel /home/$USER/ansible-files
-
 ########
 ## install python3 libraries needed for the Cloud Report
 dnf install -y python3-pip python3-libsemanage
@@ -187,109 +51,294 @@ tee /tmp/setup.yml << EOF
           client: "{{ azure_client_id }}"
           tenant: "{{ azure_tenant }}"
 
-    # - name: Remove Demo Inventory
-    #   ansible.controller.inventory:
-    #     controller_host: "https://localhost"
-    #     controller_username: admin
-    #     controller_password: ansible123!
+    # - name: Set base url
+    #   awx.awx.settings:
+    #     name: AWX_COLLECTIONS_ENABLED
+    #     value: "false"
+    #     controller_username: "{{ username }}"
+    #     controller_password: "{{ admin_password }}"
+    #     controller_host: "https://{{ ansible_host }}"
     #     validate_certs: false
-    #     name: "Demo Inventory"
-    #     organization: Default
-    #     state: absent
 
-    # - name: Ensure inventory exists
-    #   ansible.controller.inventory:
-    #     controller_host: "https://localhost"
-    #     controller_username: admin
-    #     controller_password: ansible123!
-    #     validate_certs: false
-    #     name: "AWS Inventory example"
-    #     organization: Default
+    # - name: Add azure credential to automation controller
+    #   awx.awx.credential:
+    #     name: azure_credential
+    #     description: Azure Instruqt Credential
+    #     organization: "Default"
     #     state: present
-    #   register: aws_inventory_result
-
-    # - name: Ensure AWS EC2 inventory source exists
-    #   ansible.controller.inventory_source:
-    #     controller_host: "https://localhost"
-    #     controller_username: admin
-    #     controller_password: ansible123!
+    #     controller_username: "{{ username }}"
+    #     controller_password: "{{ admin_password }}"
+    #     controller_host: "https://{{ ansible_host }}"
     #     validate_certs: false
-    #     name: "AWS EC2 Instances Source"
-    #     inventory: "AWS Inventory example"
-    #     source: ec2
-    #     credential: "AWS Credential"
-    #     source_vars:
-    #       regions: ["{{ aws_default_region }}"]
-    #     overwrite: true
-    #     overwrite_vars: true
-    #     update_on_launch: true
-    #     update_cache_timeout: 300
-    #     state: present
-    #   register: aws_inventory_source_result
+    #     credential_type: Microsoft Azure Resource Manager
+    #     inputs:
+    #       subscription: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SUBSCRIPTION_ID') }}"
+    #       tenant: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_TENANT_ID') }}"
+    #       username: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_USERNAME') }}"
+    #       password: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_PASSWORD') }}"
+    #       client: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SPN_ID') }}"
+    #       secret: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SPN_PASSWORD') }}"
+    #   register: controller_try
+    #   retries: 5
+    #   until: controller_try is not failed
 
-    - name: Add a Container Registry Credential to automation controller
+    - name: Add RHEL on Azure credential to automation controller
       ansible.controller.credential:
-        name: Quay Registry Credential
-        description: Creds to be able to access Quay
+        name: "RHEL on Azure"
+        description: "Machine Credential for Azure RHEL instances"
         organization: "Default"
         state: present
-        credential_type: "Container Registry"
-        controller_username: admin
-        controller_password: ansible123!
-        controller_host: "https://localhost"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
         validate_certs: false
+        credential_type: Machine
         inputs:
-          username: "{{ quay_username }}"
-          password: "{{ quay_password }}"
-          host: "quay.io"
+          username: "rheluser"
+          password: "RedHatAnsible123!"
       register: controller_try
-      retries: 10
+      retries: 5
+      until: controller_try is not failed
+
+    - name: Add Windows on Azure credential to automation controller
+      ansible.controller.credential:
+        name: "Windows on Azure"
+        description: "Machine Credential for Azure Windows instances"
+        organization: "Default"
+        state: present
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+        credential_type: Machine
+        inputs:
+          username: "azureuser"
+          password: "RedHatAnsible123!"
+      register: controller_try
+      retries: 5
       until: controller_try is not failed
 
     - name: Add EE to the controller instance
       ansible.controller.execution_environment:
-        name: "Terraform Execution Environment"
-        image: quay.io/acme_corp/terraform_ee
-        credential: Quay Registry Credential
-        controller_username: admin
-        controller_password: ansible123!
-        controller_host: "https://localhost"
+        name: "Microsoft Azure Execution Environment"
+        image: quay.io/aoc/ee-aap-azure-sre
+        # image: quay.io/acme_corp/azure_ee
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
         validate_certs: false
 
-    - name: Add project
+    - name: Add Azure Demos Project project
       ansible.controller.project:
-        name: "Terraform Demos Project"
+        name: "Azure Demos Project"
         description: "This is from github.com/ansible-cloud"
         organization: "Default"
         state: present
         scm_type: git
-        scm_url: http://gitea:3000/student/terraform-aap.git
-        default_environment: "Terraform Execution Environment"
-        controller_username: admin
-        controller_password: ansible123!
-        controller_host: "https://localhost"
+        scm_url: https://github.com/ansible-cloud/azure-demos
+        default_environment: "Microsoft Azure Execution Environment"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
         validate_certs: false
+      register: controller_try
+      retries: 5
+      until: controller_try is not failed
+
+    - name: Add Product Demos project
+      ansible.controller.project:
+        name: "Product Demos Project"
+        description: "This is from github.com/ansible/product-demos"
+        organization: "Default"
+        state: present
+        scm_type: git
+        scm_url: https://github.com/ansible/product-demos
+        default_environment: "Default execution environment"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+      register: controller_try
+      retries: 5
+      until: controller_try is not failed
+
+    - name: Add project
+      ansible.controller.project:
+        name: "Cloud Visibility Project"
+        description: "This is from github.com/ansible-cloud"
+        organization: "Default"
+        state: present
+        scm_type: git
+        scm_url: https://github.com/ansible-cloud/azure_visibility
+        default_environment: "Microsoft Azure Execution Environment"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+      register: controller_try
+      retries: 5
+      until: controller_try is not failed
 
     - name: Delete native job template
       ansible.controller.job_template:
         name: "Demo Job Template"
         state: "absent"
-        controller_username: admin
-        controller_password: ansible123!
-        controller_host: "https://localhost"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
         validate_certs: false
 
-    - name: Add a TERRAFORM INVENTORY
+    - name: Add ansible-1 host
+      ansible.controller.host:
+        name: "ansible-1"
+        inventory: "Demo Inventory"
+        state: present
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+        variables:
+          note: in production these passwords would be encrypted in vault
+          ansible_user: rhel
+          ansible_password: ansible123!
+          ansible_host: "{{ thisaaphostfqdn }}"
+
+    - name: Create job template
+      ansible.controller.job_template:
+        name: "{{ item.name }}"
+        job_type: "run"
+        organization: "Default"
+        inventory: "Demo Inventory"
+        project: "Azure Demos Project"
+        extra_vars:
+          resource_group_name: "azure-demo"
+          region: "eastus"
+          vnet_cidr: "10.0.0.0/16"
+          subnet_cidr: "10.0.1.0/24"
+          vnet_name: "demo_vnet"
+          subnet_name: "demo_subnet"
+          network_sec_group_name: "demo_sec_group"
+          win_vm_name: "WIN-ansible"
+          win_vm_name_sa: "winansiblesa9999"
+          win_vm_size: "Standard_DS1_v2"
+          win_vm_sku: "2022-Datacenter"
+          win_public_ip_name: "win_demo_ip"
+          win_nic_name: "win_demo_nic"
+          win_admin_user: "azureuser"
+          win_admin_password: "RedHatAnsible123!"
+        playbook: "project/{{ item.playbook }}"
+        credentials:
+          - "azure_credential"
+        state: "present"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+      with_items:
+        - { playbook: 'create_windows_vm_demo.yml', name: 'Create Windows Server 2022 VM' }
+
+    - name: Create job template
+      ansible.controller.job_template:
+        name: "{{ item.name }}"
+        job_type: "run"
+        organization: "Default"
+        inventory: "Demo Inventory"
+        project: "Azure Demos Project"
+        playbook: "project/{{ item.playbook }}"
+        credentials:
+          - "azure_credential"
+        state: "present"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+      with_items:
+        - { playbook: 'create_rhel_vm_demo.yml', name: 'Create RHEL VM' }
+
+    - name: Create job template
+      ansible.controller.job_template:
+        name: "Cloud Report"
+        job_type: "run"
+        organization: "Default"
+        inventory: "Demo Inventory"
+        project: "Cloud Visibility Project"
+        playbook: "playbooks/cloud_report_azure.yml"
+        credentials:
+          - "azure_credential"
+        state: "present"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+
+    - name: Launch VMs into Azure
+      ansible.controller.job_launch:
+        job_template: "Create Windows Server 2022 VM"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+      register: job_output
+
+    - name: Wait for job
+      ansible.controller.job_wait:
+        job_id: "{{ job_output.id }}"
+        timeout: 3600
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+
+    - name: Launch VMs into Azure
+      ansible.controller.job_launch:
+        job_template: "Create RHEL VM"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+
+    - name: Add an Azure Inventory
       ansible.controller.inventory:
-        name: "Terraform Inventory"
-        description: "Our Terraform Inventory"
+        name: "Azure Inventory"
+        description: "Our Azure Inventory"
         organization: "Default"
         state: present
-        controller_username: admin
-        controller_password: ansible123!
-        controller_host: "https://localhost"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
         validate_certs: false
-      
+
+    - name: Add an Azure Inventory Source
+      ansible.controller.inventory_source:
+        name: "Azure Source"
+        description: "Source for the Azure Inventory"
+        inventory: "Azure Inventory"
+        credential: "azure_credential"
+        source: azure_rm
+        overwrite: "True"
+        update_on_launch: "True"
+        organization: "Default"
+        state: present
+        execution_environment: "Microsoft Azure Execution Environment"
+        source_vars:
+          hostnames:
+            - computer_name
+          compose:
+            ansible_host: public_ipv4_address[0]
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+
+    - name: Update a single inventory source
+      ansible.controller.inventory_source_update:
+        name: "Azure Source"
+        inventory: "Azure Inventory"
+        organization: "Default"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
 EOF
 export ANSIBLE_LOCALHOST_WARNING=False
 export ANSIBLE_INVENTORY_UNPARSED_WARNING=False

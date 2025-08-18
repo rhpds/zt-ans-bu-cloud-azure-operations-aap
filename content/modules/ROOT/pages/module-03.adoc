@@ -1,116 +1,172 @@
+= Lab Guide: Deploying Applications on Azure VMs
+:toc:
+:toc-title: Table of Contents
+:sectnums:
+:icons: font
 
-== Your assignment.
+_A guide to deploying applications to virtual machines in Microsoft Azure using the Ansible Automation Platform._
+
+*Estimated time to complete: 15 minutes*
+
+---
+
+== Lab Overview
+
+In this final challenge, you will create and run a job template to deploy an application to a Linux virtual machine on Azure. You will then verify the installation using an ad-hoc command.
+
+---
+
+== Task 1: Create the "Deploy Application" Job Template
+
+First, you will create a job template with a survey that allows a user to select which application to install and where.
+
+. **Navigate to the Automation Controller UI.**
 +
-=== _Estimated time: 15 minutes_
+Click on the **Automation Controller** tab at the top of your lab window.
 
-____
-Deploying Applications using the Ansible Automation Platform.
-____
+. **Log in with the provided credentials.**
++
+[cols="1,2a"]
+|===
+| Parameter | Value
+| Username | `admin`
+| Password | `ansible123!`
+|===
 
-= ☑️ Task 1 - Create a Job Template
+. **Navigate to the Templates page.**
++
+In the left navigation menu, go to **Resources** → **Templates**.
 
-Access Automation Controller.
+. **Initiate the creation of a new job template.**
++
+Click the blue **Add** button, then select **Add job template**.
++
+image::../assets/add_job_template.png[Add a new job template, opts="border"]
 
-Click on the Automation Controller tab situated at the top of the lab.
-You'll see several tabs within the lab's toolbar.
-To log in, use the following information:
+. **Enter the job template details.**
++
+Fill out the form with the following information:
++
+[cols="1,1"]
+|===
+| Parameter | Value
+| Name | `Deploy Application`
+| Job Type | `Run`
+| Inventory | `Azure Inventory`
+| Project | `Product Demos Project`
+| Execution Environment | `Default execution environment`
+| Playbook | `linux/deploy_application.yml`
+| Credentials | `RHEL on Azure`
+|===
 
-Login details:+++<table>++++++<tr>++++++<td>+++User: +++<code>+++admin+++</code>++++++</td>+++
-+++<tr>++++++<td>+++Password: +++<code>+++ansible123!+++</code>++++++</td>++++++</tr>+++
-</table>
+. **Save the job template.**
++
+Scroll to the bottom and click the blue **Save** button.
++
+image::../assets/save-cancel.png[Save a new job template, opts="border"]
+
+. **Add the first survey question.**
++
+Navigate to the **Survey** tab and click the blue **Add** button.
++
+image::../assets/survey.png[Survey tab for a job template, opts="border"]
++
+Configure the first question as follows:
++
+[cols="1,1"]
+|===
+| Parameter | Value
+| Question | `Enter the Linux Host you want to patch`
+| Answer variable name | `_hosts`
+| Answer type | `Text`
+| Default answer | `RHEL-ansible`
+|===
++
+Click **Save**.
+
+. **Add the second survey question.**
++
+On the survey page, click **Add** again. Configure the second question as follows:
++
+[cols="1,1"]
+|===
+| Parameter | Value
+| Question | `Which application do you want to install?`
+| Answer variable name | `application`
+| Answer type | `Multiple Choice (single select)`
+| Multiple Choice Options | `nginx`, `gdb`, `httpd`, `nano`
+|===
++
+NOTE: After entering the options, select the radio button next to `nginx` to make it the default choice. Click **Save**.
+
+. **Enable the survey.**
++
+You must **enable the survey** by clicking the toggle switch at the top of the survey page. The text will change from `SURVEY OFF` to `SURVEY ON`.
++
+image::../assets/survey_enabled.png[Enable survey toggle, opts="border"]
+
+---
+
+== Task 2: Run the Job Template
+
+Now you will launch the template and use the survey to deploy an application.
+
+. **Navigate to the Templates page.**
++
+Go to **Resources** → **Templates**.
+
+. **Launch the "Deploy Application" job template.**
++
+Find the `Deploy Application` template and click the **Launch** icon (🚀).
+
+. **Complete the survey and run the job.**
++
+You will be prompted with the survey. The default values are correct (`RHEL-ansible` for the host and `nginx` for the application). Click **Next**, then click **Launch** to run the job.
+
+. **Monitor the job progress.**
++
+The job will take a few moments to complete. The output will confirm that `nginx` was installed on the `RHEL-ansible` host.
 
 ---
 
-Click on the `Templates` link under the `Resources` group on the left navigation menu.
+== Task 3: Verify Installation with an Ad-Hoc Command
 
-Now click the blue `Add` button, the select `Add job template`.
+Finally, you will run an ad-hoc command to confirm that the `nginx` service was installed and is running.
 
-![add_job_template.png](../assets/add_job_template.png)
+. **Navigate to your inventory hosts.**
++
+In the left navigation menu, go to **Resources** → **Inventories**, click on `Azure Inventory`, and then select the **Hosts** tab.
 
-Fill out the following fields:
+. **Select the host and initiate the command.**
++
+Select the checkbox next to `RHEL-ansible`, then click the **Run command** button.
 
-+++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
-+++<tr>++++++<td>+++Name+++</td>++++++<td>+++Deploy Application+++</td>+++
-+++<tr>++++++<td>+++Job Type+++</td>++++++<td>+++Run+++</td>+++
-+++<tr>++++++<td>+++Inventory+++</td>++++++<td>+++Azure Inventory+++</td>+++
-+++<tr>++++++<td>+++Project+++</td>++++++<td>+++Product Demos Project+++</td>+++
-+++<tr>++++++<td>+++Execution Environment+++</td>++++++<td>+++Default execution environment+++</td>+++
-+++<tr>++++++<td>+++Playbook+++</td>++++++<td>+++linux/deploy_application.yml+++</td>+++
-+++<tr>++++++<td>+++Credentials+++</td>++++++<td>+++RHEL on Azure+++</td>+++
-</table>
+. **Configure the ad-hoc command.**
++
+A wizard will appear. Fill it out as follows:
++
+--
+a. *Details View:* From the *Module* dropdown, select `service`. In the *Arguments* field, enter `name=nginx`. Click **Next**.
+b. *Execution Environment View:* Select `Default execution environment`. Click **Next**.
+c. *Credential View:* Select `RHEL on Azure`. Click **Next**.
+--
 
-Scroll to the bottom and click `Save`.
+. **Launch the ad-hoc command.**
++
+On the *Preview* screen, click **Launch**.
 
-![save-cancel.png](../assets/save-cancel.png)
-
-Click on the `Survey` menu option to create a Survey.
-
-![survey.png](../assets/survey.png)
-
-Now click the blue `Add` button.
-Fill out the following fields on the `Add Question` form:
-
-
-+++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
-+++<tr>++++++<td>+++Question+++</td>++++++<td>+++Enter the Linux Host you want to patch+++</td>+++
-+++<tr>++++++<td>+++Answer variable name+++</td>++++++<td>+++_hosts+++</td>+++
-+++<tr>++++++<td>+++Answer type+++</td>++++++<td>+++Text+++</td>+++
-+++<tr>++++++<td>+++Default answer+++</td>++++++<td>+++RHEL-ansible+++</td>+++
-</table>
-
-Scroll to the bottom and click `Save`.
-
-Add a second survey question:
-
-+++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
-+++<tr>++++++<td>+++Question+++</td>++++++<td>+++Which application do you want to install?+++</td>+++
-+++<tr>++++++<td>+++Answer variable name+++</td>++++++<td>+++application+++</td>+++
-+++<tr>++++++<td>+++Answer type+++</td>++++++<td>+++Multiple Choice (single select)+++</td>+++
-	+++<tr>++++++<td>+++Multiple Choice Options+++</td>++++++<td>++++++<ul>++++++<li>+++nginx✅+++</li>++++++<li>+++gdb+++</li>++++++<li>+++httpd+++</li>++++++<li>+++nano+++</li>++++++</ul>++++++</td>+++
-</table>
-
-Enable the Survey by turning on the `Survey Disabled` dial.  Once you do this the text will change to `Survey Enabled`.
-
-![survey_enabled.png](../assets/survey_enabled.png)
-
-
-☑️ Task 2 - Run the Job Template
-===
-
-Launch the `Deploy Application` Job Template by selecting it and clicking on `Launch`, or by simply clicking the `Rocket Launcher` 🚀 icon.
-
-You will be prompted to select the application(s) you want deployed, and to which Linux hosts.
-
-Enter the Linux Host you want to patch
-`RHEL-ansible`
-
-Which application?
-`nginx`
-
-Click `Next` and then `Launch`
-
-Monitor the job progress.  *This will take a few moments to complete.* The output will list the hosts and the application that were installed.
-
-
-☑️ Task 2 - Run an adhoc command
-===
-
-In this task you will run an adhoc command on `RHEL-ansible` to confirm that `nginx` got installed from the previous application deployment automation job that you just ran.
-
-In the left navigation menus on the left go to the following:  `Resources`, `Inventories`, select `Azure Inventory`, click on the `Hosts` menu, and then click the checkbox next to `RHEL-ansible` .
-
-Once `RHEL-ansible` is selected click on the `Run Command` button.
-1. `Details` view.  From the `Module` drop down select `service`, and in the `Arguments` field enter the following:  `name=nginx`  Click `Next`.
-2. `Execution Environment` view. Select `Default execution environment`, then click `Next`.
-3. `Credential` view. Select `RHEL on Azure`, then click `Next`.
-4. `Preview` view.  Click on `Launch`.
-
-This will take just a few moments.  The output will list the hosts and provide details on `nginx`.
-
-In this challenge we covered how you can use automation to deploy applications.  We also walked through how you can perform adhoc commands on target hosts.  There's so much more you can do with Ansible Automation Platform.
+. **Observe the output.**
++
+The job will complete in a few moments. The output will show details about the `nginx` service on the host, confirming its status.
 
 ---
-**Thank you for taking the time to learn about automating cloud operations tasks (in Azure) using the Red Hat Ansible Automation Platform!  This can easily be performed in other clouds environments too!**
 
-🐛 Encountered an issue?
-====+++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</table>+++
+== Conclusion
+
+Thank you for taking the time to learn about automating cloud operations tasks in Azure using the Red Hat Ansible Automation Platform!
+
+In this lab, you have seen how automation can be used to deploy applications and how ad-hoc commands can perform quick checks on target hosts. These same principles can be easily applied to other cloud environments.
+
+== Troubleshooting
+
+If you have encountered an issue or have noticed something not quite right, please open an issue with the lab maintainers.

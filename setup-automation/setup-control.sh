@@ -42,7 +42,7 @@ tee /tmp/setup.yml << EOF
   tasks:
 
     - name: Add azure credential to automation controller
-      awx.awx.credential:
+      ansible.controller.credential:
         name: azure_credential
         description: Azure Instruqt Credential
         organization: "Default"

@@ -33,6 +33,9 @@ tee /tmp/setup.yml << EOF
     azure_client_id: "{{ lookup('env', 'AZURE_CLIENT_ID') | default('AZURE_CLIENT_ID_NOT_FOUND', true) }}"
     azure_password: "{{ lookup('env', 'AZURE_PASSWORD') | default('AZURE_PASSWORD_NOT_FOUND', true) }}"
     azure_resourcegroup: "{{ lookup('env', 'AZURE_RESOURCEGROUP') | default('AZURE_RESOURCEGROUP_NOT_FOUND', true) }}"
+    username: "admin"
+    admin_password: "ansible123!"
+    controller_host: "https://localhost"
 
   tasks:
   

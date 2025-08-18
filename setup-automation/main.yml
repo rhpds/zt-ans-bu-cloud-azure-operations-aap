@@ -78,6 +78,11 @@
       QUAY_PASSWORD: "{{ password }}"
       REG_KEY: "{{ reg_username }}"
       REG_PASS: "{{ reg_password }}"
+      AZURE_SUBSCRIPTION: "{{ lookup('env', 'AZURE_SUBSCRIPTION') | default('AZURE_SUBSCRIPTION_NOT_FOUND', true) }}"
+      AZURE_TENANT: "{{ lookup('env', 'AZURE_TENANT') | default('AZURE_TENANT_NOT_FOUND', true) }}"
+      AZURE_CLIENT_ID: "{{ lookup('env', 'AZURE_CLIENT_ID') | default('AZURE_CLIENT_ID_NOT_FOUND', true) }}"
+      AZURE_PASSWORD: "{{ lookup('env', 'AZURE_PASSWORD') | default('AZURE_PASSWORD_NOT_FOUND', true) }}"
+      AZURE_RESOURCEGROUP: "{{ lookup('env', 'AZURE_RESOURCEGROUP') | default('AZURE_RESOURCEGROUP_NOT_FOUND', true) }}"
 
   - name: Output script result
     ansible.builtin.debug:

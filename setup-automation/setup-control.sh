@@ -10,6 +10,7 @@ echo "192.168.1.10 control.lab control" >> /etc/hosts
 ########
 ## install python3 libraries needed for the Cloud Report
 dnf install -y python3-pip python3-libsemanage
+export THISAAPHOST=$(hostname -A)
 
 # Create a playbook for the user to execute
 tee /tmp/setup.yml << EOF
@@ -36,6 +37,7 @@ tee /tmp/setup.yml << EOF
     username: "admin"
     admin_password: "ansible123!"
     controller_host: "https://localhost"
+    thisaaphostfqdn: $THISAAPHOST
 
   tasks:
   

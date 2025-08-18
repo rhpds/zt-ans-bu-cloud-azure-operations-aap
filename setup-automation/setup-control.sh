@@ -40,52 +40,28 @@ tee /tmp/setup.yml << EOF
     thisaaphostfqdn: $THISAAPHOST
 
   tasks:
-  
-    - name: Add Azure credential
-      ansible.controller.credential:
-        name: 'Azure Credential'
-        organization: Default
-        credential_type: "Microsoft Azure Resource Manager"
-        controller_host: "https://localhost"
-        controller_username: admin
-        controller_password: ansible123!
+
+    - name: Add azure credential to automation controller
+      awx.awx.credential:
+        name: azure_credential
+        description: Azure Instruqt Credential
+        organization: "Default"
+        state: present
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
         validate_certs: false
+        credential_type: Microsoft Azure Resource Manager
         inputs:
           subscription: "{{ azure_subscription }}"
           secret: "{{ azure_password }}"
           client: "{{ azure_client_id }}"
           tenant: "{{ azure_tenant }}"
-
-    # - name: Set base url
-    #   awx.awx.settings:
-    #     name: AWX_COLLECTIONS_ENABLED
-    #     value: "false"
-    #     controller_username: "{{ username }}"
-    #     controller_password: "{{ admin_password }}"
-    #     controller_host: "https://{{ ansible_host }}"
-    #     validate_certs: false
-
-    # - name: Add azure credential to automation controller
-    #   awx.awx.credential:
-    #     name: azure_credential
-    #     description: Azure Instruqt Credential
-    #     organization: "Default"
-    #     state: present
-    #     controller_username: "{{ username }}"
-    #     controller_password: "{{ admin_password }}"
-    #     controller_host: "https://{{ ansible_host }}"
-    #     validate_certs: false
-    #     credential_type: Microsoft Azure Resource Manager
-    #     inputs:
-    #       subscription: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SUBSCRIPTION_ID') }}"
-    #       tenant: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_TENANT_ID') }}"
-    #       username: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_USERNAME') }}"
-    #       password: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_PASSWORD') }}"
-    #       client: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SPN_ID') }}"
-    #       secret: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SPN_PASSWORD') }}"
-    #   register: controller_try
-    #   retries: 5
-    #   until: controller_try is not failed
+          # username: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_USERNAME') }}"
+          # password: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_PASSWORD') }}"
+      register: controller_try
+      retries: 5
+      until: controller_try is not failed
 
     - name: Add RHEL on Azure credential to automation controller
       ansible.controller.credential:

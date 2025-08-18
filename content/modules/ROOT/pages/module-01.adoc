@@ -138,13 +138,13 @@ b. **Inventory Source:** Select `Azure Source`.
 c. Click **Save**.
 --
 +
-image::../assets/azure_source.png[Adding an inventory source sync node, opts="border"]
+image::../assets/images/azure_source.png[Adding an inventory source sync node, opts="border"]
 
 . **Add the second node (Job Template).**
 +
 Hover over the `Azure Source` node you just created and click the **+** icon to add the next step. Configure it as follows:
 +
-image::../assets/add_node_azure.png[Adding a second node to the workflow, opts="border"]
+image::../assets/images/add_node_azure.png[Adding a second node to the workflow, opts="border"]
 +
 --
 a. **Run type:** Ensure `On Success` is selected. Click **Next**.
@@ -157,7 +157,7 @@ d. Click **Save**.
 +
 In the top right corner of the Visualizer, click **Save**. Your completed workflow is now ready.
 +
-image::../assets/full_workflow_azure.png[Completed Azure information workflow, opts="border"]
+image::../assets/images/full_workflow_azure.png[Completed Azure information workflow, opts="border"]
 
 . **Launch the workflow.**
 +

@@ -41,7 +41,7 @@ In the left navigation menu, go to **Resources** → **Templates**.
 +
 Click the blue **Add** button, then select **Add job template**.
 +
-image::../assets/add_job_template.png[Add a new job template, opts="border"]
+image::../assets/images/add_job_template.png[Add a new job template, opts="border"]
 
 . **Enter the job template details.**
 +
@@ -63,13 +63,13 @@ Fill out the form with the following information:
 +
 Scroll to the bottom and click the blue **Save** button.
 +
-image::../assets/save-cancel.png[Save a new job template, opts="border"]
+image::../assets/images/save-cancel.png[Save a new job template, opts="border"]
 
 . **Add the first survey question.**
 +
 Navigate to the **Survey** tab and click the blue **Add** button.
 +
-image::../assets/survey.png[Survey tab for a job template, opts="border"]
+image::../assets/images/survey.png[Survey tab for a job template, opts="border"]
 +
 Configure the first question as follows:
 +
@@ -103,7 +103,7 @@ NOTE: After entering the options, select the radio button next to `nginx` to mak
 +
 You must **enable the survey** by clicking the toggle switch at the top of the survey page. The text will change from `SURVEY OFF` to `SURVEY ON`.
 +
-image::../assets/survey_enabled.png[Enable survey toggle, opts="border"]
+image::.../assets/images/survey_enabled.png[Enable survey toggle, opts="border"]
 
 ---
 

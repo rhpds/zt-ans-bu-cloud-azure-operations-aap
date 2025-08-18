@@ -1,235 +1,116 @@
-:doctype: book
 
-'''
+== Your assignment.
++
+=== _Estimated time: 15 minutes_
 
-= OPTIONAL - Terraform Basics
+____
+Deploying Applications using the Ansible Automation Platform.
+____
 
-Terraform is a fantastic tool used to provision immutable infrastructure.
-It is widely used for its declarative nature in Infrastructure as Code (IaC).
+= ☑️ Task 1 - Create a Job Template
 
-👋 Challenge 3 introduction.
+Access Automation Controller.
 
+Click on the Automation Controller tab situated at the top of the lab.
+You'll see several tabs within the lab's toolbar.
+To log in, use the following information:
 
-== *_OPTIONAL CHALLENGE_*
+Login details:+++<table>++++++<tr>++++++<td>+++User: +++<code>+++admin+++</code>++++++</td>+++
++++<tr>++++++<td>+++Password: +++<code>+++ansible123!+++</code>++++++</td>++++++</tr>+++
+</table>
 
-Estimated time to complete: _15 minutes_
+---
 
-=== OPTIONAL - Terraform Basics
+Click on the `Templates` link under the `Resources` group on the left navigation menu.
 
-In this challenge you will learn
-* Basic use of Terraform to deploy cloud infrastructure in AWS cloud
+Now click the blue `Add` button, the select `Add job template`.
 
-=== Terraform Basics (OPTIONAL)
+![add_job_template.png](../assets/add_job_template.png)
 
-Terraform is a great tool that uses Infrastructure as Code (IaC) to define infrastructure;
-build, change, and destroy these infrastructure resources.
+Fill out the following fields:
 
-This challenge will introduce you to some basic Terraform concepts and to give you some experience in using Terraform to create and destroy cloud infrastructure resources.
++++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
++++<tr>++++++<td>+++Name+++</td>++++++<td>+++Deploy Application+++</td>+++
++++<tr>++++++<td>+++Job Type+++</td>++++++<td>+++Run+++</td>+++
++++<tr>++++++<td>+++Inventory+++</td>++++++<td>+++Azure Inventory+++</td>+++
++++<tr>++++++<td>+++Project+++</td>++++++<td>+++Product Demos Project+++</td>+++
++++<tr>++++++<td>+++Execution Environment+++</td>++++++<td>+++Default execution environment+++</td>+++
++++<tr>++++++<td>+++Playbook+++</td>++++++<td>+++linux/deploy_application.yml+++</td>+++
++++<tr>++++++<td>+++Credentials+++</td>++++++<td>+++RHEL on Azure+++</td>+++
+</table>
 
-NOTE: You can perform the following steps at the TERMINAL, or in Visual Studio Code (VSCode).
-In VSCode you can open a terminal prompt.
-Choose either the `TERMINAL` tab, or the `VSCODE` tab from the top of the lab screen.
-We will walk through the steps using the `TERMINAL` but please feel free to do this in the `VSCODE` tab if you are more comfortable there!
+Scroll to the bottom and click `Save`.
 
-'''
+![save-cancel.png](../assets/save-cancel.png)
 
-== ☑️ Task 1 - Initialize a Terraform Project
+Click on the `Survey` menu option to create a Survey.
 
-Open the `Terminal` tab from the top of the lab.
+![survey.png](../assets/survey.png)
 
-Change to the `/home/rhel/lab_exercises/1.Terraform_Basics` folder
+Now click the blue `Add` button.
+Fill out the following fields on the `Add Question` form:
 
-[source,bash,role=execute]
-----
-cd /home/rhel/lab_exercises/1.Terraform_Basics
-----
 
-Here you will find a `main.tf` file which has been created for you.
++++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
++++<tr>++++++<td>+++Question+++</td>++++++<td>+++Enter the Linux Host you want to patch+++</td>+++
++++<tr>++++++<td>+++Answer variable name+++</td>++++++<td>+++_hosts+++</td>+++
++++<tr>++++++<td>+++Answer type+++</td>++++++<td>+++Text+++</td>+++
++++<tr>++++++<td>+++Default answer+++</td>++++++<td>+++RHEL-ansible+++</td>+++
+</table>
 
-Take a quick look at this file
+Scroll to the bottom and click `Save`.
 
-[source,bash,role=execute]
-----
-cat main.tf
-----
+Add a second survey question:
 
-It's content will look like the following:
++++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
++++<tr>++++++<td>+++Question+++</td>++++++<td>+++Which application do you want to install?+++</td>+++
++++<tr>++++++<td>+++Answer variable name+++</td>++++++<td>+++application+++</td>+++
++++<tr>++++++<td>+++Answer type+++</td>++++++<td>+++Multiple Choice (single select)+++</td>+++
+	+++<tr>++++++<td>+++Multiple Choice Options+++</td>++++++<td>++++++<ul>++++++<li>+++nginx✅+++</li>++++++<li>+++gdb+++</li>++++++<li>+++httpd+++</li>++++++<li>+++nano+++</li>++++++</ul>++++++</td>+++
+</table>
 
-[source,terraform]
-----
-# Use AWS provider for Terraform
-provider "aws" {
-  region = "us-east-1"
-}
+Enable the Survey by turning on the `Survey Disabled` dial.  Once you do this the text will change to `Survey Enabled`.
 
-resource "aws_instance" "basic_rhel" {
-  ami           = "ami-0005e0cfe09cc9050"
-  instance_type = "t2.micro"
+![survey_enabled.png](../assets/survey_enabled.png)
 
-  }
-----
 
-In this simple example, the `main.tf` file will declare a few things.
+☑️ Task 2 - Run the Job Template
+===
 
-* A *provider* for Terraform to work with.
-In this example the Terraform Provider in use is for AWS (Terraform Provider for AWS)
-* A *resource* to indicate the type of infrastructure resource, what AWS Machine Image (ami), and what instance type to use
+Launch the `Deploy Application` Job Template by selecting it and clicking on `Launch`, or by simply clicking the `Rocket Launcher` 🚀 icon.
 
-Initialize the Terraform Project using the following command
+You will be prompted to select the application(s) you want deployed, and to which Linux hosts.
 
-[source,bash,role=execute]
-----
-terraform init
-----
+Enter the Linux Host you want to patch
+`RHEL-ansible`
 
-This will get Terraform to download and provision the backend with what it needs for the chosen AWS provider.
+Which application?
+`nginx`
 
-Once this is done, run the following command
+Click `Next` and then `Launch`
 
-[source,bash,role=execute]
-----
-ls -al
-----
+Monitor the job progress.  *This will take a few moments to complete.* The output will list the hosts and the application that were installed.
 
-You will see the following has been created:
 
-* _.terraform_  _- This provides the backend requirements for Terraform_
-* _.terraform.lock.hcl_ - _This is the dependency lock file_
+☑️ Task 2 - Run an adhoc command
+===
 
-Now that you have initialized this Terraform Project, go ahead and build the resource(s)!
+In this task you will run an adhoc command on `RHEL-ansible` to confirm that `nginx` got installed from the previous application deployment automation job that you just ran.
 
-'''
+In the left navigation menus on the left go to the following:  `Resources`, `Inventories`, select `Azure Inventory`, click on the `Hosts` menu, and then click the checkbox next to `RHEL-ansible` .
 
-== ☑️ Task 2 - Plan and Apply the Terraform Project
+Once `RHEL-ansible` is selected click on the `Run Command` button.
+1. `Details` view.  From the `Module` drop down select `service`, and in the `Arguments` field enter the following:  `name=nginx`  Click `Next`.
+2. `Execution Environment` view. Select `Default execution environment`, then click `Next`.
+3. `Credential` view. Select `RHEL on Azure`, then click `Next`.
+4. `Preview` view.  Click on `Launch`.
 
-From the project folder you have already initialized Terraform and you can now deploy, by running the `terraform plan`, then `terraform apply` commands
+This will take just a few moments.  The output will list the hosts and provide details on `nginx`.
 
-[source,bash,role=execute]
-----
-terraform plan -out myMagicalInstance
-----
+In this challenge we covered how you can use automation to deploy applications.  We also walked through how you can perform adhoc commands on target hosts.  There's so much more you can do with Ansible Automation Platform.
 
-This creates a plan of your build based on the `main.tf` file you have.
-You can look at the output and see all the components being added (+) to the infrastructure plan.
+---
+**Thank you for taking the time to learn about automating cloud operations tasks (in Azure) using the Red Hat Ansible Automation Platform!  This can easily be performed in other clouds environments too!**
 
-Next let's get Terraform to provision this plan
-
-[source,bash,role=execute]
-----
-terraform apply myMagicalInstance
-----
-
-Terraform will now create the infrastructure you have defined in your manifest.
-You will notice that the number of resources created should reflect the number of resources specified.
-
-Run the following AWS cli command to check for running instances and to get the `instance ID`.
-Simply copy and paste this command to the terminal prompt
-
-[source,bash,role=execute]
-----
-aws ec2 describe-instances --filters "Name=instance-type,Values=t2.micro" --query "Reservations[*].Instances[*].[InstanceId]" --output table --region "us-east-1"
-----
-
-image::https://github.com/HichamMourad/terraform-aap/blob/main/images/basics1.png?raw=true[]
-
-NOTE: *Note that you may see more than 1 instance, and that's becasue of the infrastructure you created in earlier challenges in this lab.*
-
-Now, if you wanted to get detailed information about the AWS instance from Terraform you can look in the Terraform state file.
-
-[source,bash,role=execute]
-----
-cat terraform.tfstate
-----
-
-Here you will see only the resources created (1 ec2 instance) by this Terraform project.
-This file provides you with a wealth of information regarding the infrastructure that was just provisioned.
-
-*_OPTIONAL:  Login to the `AWS Console` using the tab at the top of the lab to view the resource(s) created in AWS._*
-
-'''
-
-== ☑️ Task 3 - Make Changes to the Terraform Project
-
-You have created and deployed your first AWS instance with a simple Terraform project.
-What if you want to make a change of some sort?
-
-Edit the `main.tf` file and add more resources.
-*Add a security group for example, and specify ports for ingess and egress.*.
-
-[source,bash,role=execute]
-----
-vim main.tf
-----
-
-[source,terraform,role=execute]
-----
-resource "aws_security_group" "terraform_group" {
-  name = "myMagicalSecGroup"
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-}
-
-  ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-}
-
-  egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-}
-}
-----
-
-Once you have made the these ADDITIONS, you will need to run `terraform plan` to update the plan.
-This will output the needed changes.
-
-[source,bash,role=execute]
-----
-terraform plan --out myMagicalInstance
-----
-
-You will notice in the summary that the changes have been indicated with - and + for what has been added taken away.
-Please go ahead and apply the change.
-
-Example output:  `Plan: 1 to add, 0 to change, 0 to destroy.`
-
-[source,bash,role=execute]
-----
-terraform apply myMagicalInstance
-----
-
-Terraform will make changes and add the additional resources specified by your `main.tf` file changes/additions.
-
-*_OPTIONAL:  Login to the `AWS Console` using the tab at the top of the lab to view the modifications that took place.
-The addition of the security group and the ingress / egress ports._*
-
-'''
-
-== ☑️ Task 4 - Deprovisioning resources of a Terraform Project
-
-Terraform makes it really simple to `clean up / remove / deprovision` the project resources.
-Since you no longer need these resources, please destroy the infrastructure resources created by the Terraform project.
-Terraform will use the build files which act as a source of truth to de-provision all infrastructure and resources.
-
-[source,bash,role=execute]
-----
-terraform destroy
-----
-
-You will be prompted if you want to continue, please enter `yes`.
-
-Momentarily you will see confirmation of the resources destruction (1 ec2 instance, and 1 security group).
-
-image::https://github.com/HichamMourad/terraform-aap/blob/main/images/basics2.png?raw=true[]
-
-*_OPTIONAL:  Login to the `AWS Console` and validate that the AWS resource(s) have been deleted._*
-
-This concludes the Terraform Basics challenge
+🐛 Encountered an issue?
+====+++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</table>+++

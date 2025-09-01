@@ -5,16 +5,13 @@ antora:
   dir: www
   modules:
     - name: module-01
-      label: "Terraform and Ansible Automation Platform 2.5"
+      label: "Understanding and using Ansible Automation Platform"
       solveButton: false
     - name: module-02
-      label: "Create a Terraform-enabled Execution Environment"
+      label: "Using Ansible Automation Platform to perform OS Patching"
       solveButton: false
     - name: module-03
-      label: "OPTIONAL - Terraform Basics"
-      solveButton: false
-    - name: module-04
-      label: "OPTIONAL - Terraform and the Certified Collection for Terraform"
+      label: "Application Deployment using Ansible Automation Platform"
       solveButton: false
 
 tabs:
@@ -22,10 +19,5 @@ tabs:
     url: https://control-${guid}.${domain}/
   # - name: gitea
   #   url: https://gitea-${guid}.${domain}/
-  - name: VS Ccode
-    url: https://vscode-${guid}.${domain}
-    external: false
-  - name: "TERMINAL"
-    url: /wetty_vscode
-  - name: Cloud (AWS)
+  - name: Cloud (Azure)
     url: /cloud

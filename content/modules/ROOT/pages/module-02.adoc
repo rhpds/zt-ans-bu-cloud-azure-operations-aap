@@ -53,8 +53,8 @@ Fill out the form with the following information:
 | Job Type | `**RUN**`
 | Inventory | `Azure Inventory`
 | Project | `Product Demos Project`
-| Execution Environment | `Default execution environment`
 | Playbook | `linux/patching.yml`
+| Execution Environment | `Default execution environment`
 | Credentials | `RHEL on Azure`
 |===
 +

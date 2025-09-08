@@ -92,10 +92,10 @@ Fill out the form with the following information:
 |===
 | Parameter | Value
 | Name | `Retrieve virtual machine information`
-| Inventory | `Demo Inventory`
+| Inventory | `Azure Inventory`
 | Project | `Cloud Visibility Project`
-| Execution Environment | `Microsoft Azure Execution Environment`
 | Playbook | `playbooks/retrieve_vms.yml`
+| Execution Environment | `Microsoft Azure Execution Environment`
 | Credentials | `azure_credential`
 |===
 +
@@ -144,13 +144,14 @@ b. `Inventory Source` Select `Azure Source`.
 c. Click `Next`, then `Finish`
 --
 +
-image::../assets/images/azure-wf-inventorynode1.png[Adding an inventory source sync node, opts="border"]
+image::https://github.com/nmartins0611/zt-ans-bu-cloud-azure-operations-aap/blob/main/content/modules/ROOT/assets/images/azure-wf-inventorynode1.png[Adding an inventory source sync node, opts="border"]
+
 
 . **Add the second step (Job Template).**
 +
 Cick on the elipses (3-dots) at the end of `Azure Source` , and select `+ Add step and link`. Configure it as follows:
 +
-image::../assets/images/azure-wf-inventorynode2.png[Adding a second node to the workflow, opts="border"]
+image::https://github.com/nmartins0611/zt-ans-bu-cloud-azure-operations-aap/blob/main/content/modules/ROOT/assets/images/azure-wf-inventorynode2.png[Adding a second node to the workflow, opts="border"]
 +
 --
 a. `Node Type` Select `Job Template`.
@@ -161,7 +162,7 @@ e. Click `Save` at the top left corner of the Visualizer.
 --
 Your completed workflow is now ready.
 +
-image::../assets/images/azure-wf-jobtemplatenode1.png[Completed Azure information workflow, opts="border"]
+image::https://github.com/nmartins0611/zt-ans-bu-cloud-azure-operations-aap/blob/main/content/modules/ROOT/assets/images/azure-wf-jobtemplatenode1.png[Completed Azure information workflow, opts="border"]
 
 . **Launch the workflow.**
 +

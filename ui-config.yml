@@ -22,4 +22,4 @@ tabs:
   - name: Cloud (Azure)
     url: /cloud
   - name: Dynamic Report
-    url: https://control-report-${guid}.${domain}/
+    url: https://report-server-${guid}.${domain}/

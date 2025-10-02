@@ -136,7 +136,7 @@ virtualmachines:
           uEOWpQhGYHMC0A==
           -----END CERTIFICATE-----
         
-  - name: "vscode"
+  - name: "report-server"
     image: "devtools-ansible"
     memory: "8G"
     cores: 2
@@ -149,18 +149,6 @@ virtualmachines:
     networks:
       - default
     services:
-      # - name: vscode-http
-      #   ports:
-      #     - port: 80
-      #       protocol: TCP
-      #       targetPort: 80
-      #       name: vscode
-      - name: vscode-8080
-        ports:
-          - port: 8080
-            protocol: TCP
-            targetPort: 8080
-            name: vscode
       - name: report-server
         ports:
           - port: 8088
@@ -168,18 +156,6 @@ virtualmachines:
             targetPort: 8088
             name: report-server            
     routes:
-      # - name: vscode-http
-      #   host: vscode
-      #   service: vscode-http
-      #   targetPort: 80
-      #   tls: true
-      #   tls_termination: Edge
-      - name: vscode-8080
-        host: vscode
-        service: vscode-8080
-        targetPort: 8080
-        tls: true
-        tls_termination: Edge
       - name: report-server
         host: report-server
         service: report-server
@@ -188,8 +164,8 @@ virtualmachines:
         tls_termination: Edge        
     userdata: |-
       #cloud-config
-      user: rhel
-      password: ansible123!
+      user: rheluser
+      password: RedHatAnsible123!
       chpasswd: { expire: False }
       runcmd:
         - echo "PasswordAuthentication yes" > /etc/ssh/sshd_config.d/50-cloud-init.conf

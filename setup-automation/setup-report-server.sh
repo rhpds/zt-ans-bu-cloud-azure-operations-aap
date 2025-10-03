@@ -6,4 +6,8 @@ rpm -Uhv https://${SATELLITE_URL}/pub/katello-ca-consumer-latest.noarch.rpm
 subscription-manager register --org=${SATELLITE_ORG} --activationkey=${SATELLITE_ACTIVATIONKEY}
 setenforce 0
 
+yum install httpd
+systemctl start httpd
+systemctl enable httpd
+
 sudo useradd -G wheel rheluser && echo "rheluser:RedHatAnsible123!" | sudo chpasswd

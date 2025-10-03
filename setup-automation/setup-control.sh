@@ -343,6 +343,20 @@ tee /tmp/setup.yml << EOF
         controller_password: "{{ admin_password }}"
         controller_host: "https://{{ ansible_host }}"
         validate_certs: false
+        
+    - name: Add ansible-1 host
+      ansible.controller.host:
+        name: "report-server"
+        inventory: "Azure Inventory"
+        state: present
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+
+
+
+        
 EOF
 export ANSIBLE_LOCALHOST_WARNING=False
 export ANSIBLE_INVENTORY_UNPARSED_WARNING=False

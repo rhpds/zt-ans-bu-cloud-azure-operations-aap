@@ -344,7 +344,7 @@ tee /tmp/setup.yml << EOF
         controller_host: "https://{{ ansible_host }}"
         validate_certs: false
         
-    - name: Add ansible-1 host
+    - name: Add report-server host
       ansible.controller.host:
         name: "report-server"
         inventory: "Azure Inventory"
@@ -353,7 +353,10 @@ tee /tmp/setup.yml << EOF
         controller_password: "{{ admin_password }}"
         controller_host: "https://{{ ansible_host }}"
         validate_certs: false
-
+        variables:
+          note: in production these passwords would be encrypted in vault
+          ansible_user: rhel
+          ansible_password: ansible123!
 
 
         

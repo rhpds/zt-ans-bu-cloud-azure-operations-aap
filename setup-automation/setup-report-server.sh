@@ -5,4 +5,4 @@ rpm -Uhv https://${SATELLITE_URL}/pub/katello-ca-consumer-latest.noarch.rpm
 
 subscription-manager register --org=${SATELLITE_ORG} --activationkey=${SATELLITE_ACTIVATIONKEY}
 setenforce 0
-
+sudo useradd rheluser && echo "rheluser:RedHatAnsible123!" | sudo chpasswd

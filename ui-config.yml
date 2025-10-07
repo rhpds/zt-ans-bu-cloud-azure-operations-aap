@@ -21,5 +21,3 @@ tabs:
   #   url: https://gitea-${guid}.${domain}/
   - name: Cloud (Azure)
     url: /cloud
-  # - name: Dynamic Report
-  #   url: https://report-server-${guid}.${domain}/

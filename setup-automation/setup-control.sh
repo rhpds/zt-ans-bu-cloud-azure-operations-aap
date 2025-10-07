@@ -274,6 +274,7 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
       with_items:
         - { playbook: 'create_rhel_vm_demo.yml', name: 'Create RHEL VM' }
+        - { playbook: 'create_reportserver_demo.yml', name: 'Create RHEL reportserver' }
 
     - name: Launch VMs into Azure
       ansible.controller.job_launch:
@@ -296,6 +297,24 @@ tee /tmp/setup.yml << EOF
     - name: Launch VMs into Azure
       ansible.controller.job_launch:
         job_template: "Create RHEL VM"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+      register: job_output
+
+    - name: Wait for job
+      ansible.controller.job_wait:
+        job_id: "{{ job_output.id }}"
+        timeout: 3600
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+
+    - name: Launch VMs into Azure
+      ansible.controller.job_launch:
+        job_template: "Create RHEL reportserver"
         controller_username: "{{ username }}"
         controller_password: "{{ admin_password }}"
         controller_host: "https://{{ ansible_host }}"

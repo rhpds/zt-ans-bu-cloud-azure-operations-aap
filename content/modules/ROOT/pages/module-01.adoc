@@ -144,14 +144,17 @@ b. `Inventory Source` Select `Azure Source`.
 c. Click `Next`, then `Finish`
 --
 +
-image::https://github.com/nmartins0611/zt-ans-bu-cloud-azure-operations-aap/blob/main/content/modules/ROOT/assets/images/azure-wf-inventorynode1.png[Adding an inventory source sync node, opts="border"]
 
+image::https://github.com/nmartins0611/zt-ans-bu-cloud-azure-operations-aap/blob/main/content/modules/ROOT/assets/images/azure-wf-inventorynode1.png?raw=true[Adding an inventory source sync node, opts="border"]
 
++
 . **Add the second step (Job Template).**
 +
 Cick on the elipses (3-dots) at the end of `Azure Source` , and select `+ Add step and link`. Configure it as follows:
 +
-image::https://github.com/nmartins0611/zt-ans-bu-cloud-azure-operations-aap/blob/main/content/modules/ROOT/assets/images/azure-wf-inventorynode2.png[Adding a second node to the workflow, opts="border"]
+
+image::https://github.com/nmartins0611/zt-ans-bu-cloud-azure-operations-aap/blob/main/content/modules/ROOT/assets/images/azure-wf-inventorynode2.png?raw=true[Adding a second node to the workflow, opts="border"]
+
 +
 --
 a. `Node Type` Select `Job Template`.

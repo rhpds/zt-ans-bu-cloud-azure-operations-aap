@@ -86,10 +86,10 @@ On the survey page, click the blue `Create survey question` button. Configure th
 [cols="1,1"]
 |===
 | Parameter | Value
-| Question | `Where should the report be generated?`
+| Question | `Where should the RHEL Patching report be generated?`
 | Answer variable name | `report_server`
 | Answer type | `Text`
-| Default answer | `RHEL-ansible`
+| Default answer | `reportserver`
 |===
 +
 Click `Create survey question`.
